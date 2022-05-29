@@ -6,29 +6,37 @@ blacklist = ".blklst"
 
 def check_against_blacklist(files):
 	with open(blacklist, "r") as fd:
-		for file in files:
-			if file in fd.read():
+		lines = fd.readlines()
+		lines = [line.rstrip() for line in lines]
+
+	for file in files:
+		for line in lines:
+			altpath = os.getcwd() + "/" + file
+			if file == line or altpath == line:
 				print("Cannot rm "+file+": file is blacklisted")
 				files.remove(file)
-		
-def parse_args(args):
+			
+def main():
 	files = []
+	args = []
 	for i in range(1, len(sys.argv)):
-		if "-" not in sys.argv[i]:
-			files.append(sys.argv[i])
+		if '-' == sys.argv[i][0]:
+			args.append(sys.argv[i])
+		else:
+			files.append(sys.argv[i])	
 
-	return files
-		
-def main(args):
-	files = parse_args(args)
 	check_against_blacklist(files)
 
-	cmd = "rm "
-	for file in files: 
-		cmd = cmd + file
+	if len(files) == 0:
+		quit()	
+
+	cmd = "rm"
+	for arg in args: 
+		cmd = cmd + " " + arg 
+
+	for file in files:
+		cmd = cmd + " " + file
 
 	os.system(cmd)
-	
-	print(files)
 
-main(sys.argv)
+main()
