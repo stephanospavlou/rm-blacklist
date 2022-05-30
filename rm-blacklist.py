@@ -11,9 +11,8 @@ def check_against_blacklist(files):
 
 	for file in files:
 		for line in lines:
-			altpath = os.getcwd() + "/" + file
-			if file == line or altpath == line:
-				print("Cannot rm "+file+": file is blacklisted")
+			if line[0] != '#' and os.path.abspath(file) == line:
+				print("Cannot rm " + file + ": file is blacklisted")
 				files.remove(file)
 			
 def main():
