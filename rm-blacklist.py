@@ -9,9 +9,14 @@ def check_against_blacklist(files):
 		lines = fd.readlines()
 		lines = [line.rstrip() for line in lines]
 
+	# remove comments
+	for line in lines:
+		if line[0] == '#':
+			lines.remove(line)
+
 	for file in files:
 		for line in lines:
-			if line[0] != '#' and os.path.abspath(file) == line:
+			if os.path.abspath(file) == line:
 				print("Cannot rm " + file + ": file is blacklisted")
 				files.remove(file)
 			
