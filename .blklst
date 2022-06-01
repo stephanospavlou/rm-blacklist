@@ -1,2 +1,4 @@
-# Put the absolute paths of files
-# to blacklist below, one per line
+# Use blacklist.py to add files to this
+# file from the command  line, or put
+# the absolute paths of files to blacklist
+# below, one per line.
