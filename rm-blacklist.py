@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import os, sys
 
 blacklist = ".blklst"
@@ -9,8 +8,8 @@ def check_against_blacklist(files):
 		lines = fd.readlines()
 		lines = [line.rstrip() for line in lines]
 
-	# remove comments and ignore
-  # lines containing only whitespace
+	# remove comments and ignore lines
+  # containing only whitespace
 	lines_to_remove = []
 	for line in lines:
 		if line == '' or line[0] == '#': 
@@ -31,10 +30,10 @@ def check_against_blacklist(files):
 			
 def main():
 	files = []
-	args = []
+	flags = []
 	for i in range(1, len(sys.argv)):
 		if '-' == sys.argv[i][0]:
-			args.append(sys.argv[i])
+			flags.append(sys.argv[i])
 		else:
 			files.append(sys.argv[i])	
 
@@ -44,8 +43,8 @@ def main():
 		quit()	
 
 	cmd = "rm"
-	for arg in args: 
-		cmd = cmd + " " + arg 
+	for flag in flags: 
+		cmd = cmd + " " + flag 
 
 	for file in files:
 		cmd = cmd + " " + file
