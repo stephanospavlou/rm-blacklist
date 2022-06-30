@@ -3,52 +3,56 @@ import os, sys
 
 blacklist = ".blklst"
 
-def check_against_blacklist(files):
-	with open(blacklist, "r") as fd:
-		lines = fd.readlines()
-		lines = [line.rstrip() for line in lines]
+def check_against_blacklist(args: list) -> list:
+  with open(blacklist, "r") as file:
+    lines = file.readlines()
 
-	# remove comments and ignore lines
-  # containing only whitespace
-	lines_to_remove = []
-	for line in lines:
-		if line == '' or line[0] == '#': 
-			lines_to_remove.append(line)
+  new_args = args
 
-	for line in lines_to_remove:
-		lines.remove(line)
+  for line in lines:
+    line = line.strip()
 
-	files_to_remove = []
-	for file in files:
-		for line in lines:
-			if os.path.abspath(file) == line:
-				print("Cannot rm " + file + ": file is blacklisted")
-				files_to_remove.append(file)
+    if line == "" or line[0] == '#':
+      continue
+    else:
+      for arg in args:
+        if os.path.abspath(arg) == line:
+          print("Cannot rm " + arg + ": file is blacklisted")
+          # there is an inefficiency here:
+          # we continue to check args that
+          # we have already determined are
+          # blacklisted.
+          new_args.remove(arg)
 
-	for file in files_to_remove:
-		files.remove(file)
-			
-def main():
-	files = []
-	flags = []
-	for i in range(1, len(sys.argv)):
-		if '-' == sys.argv[i][0]:
-			flags.append(sys.argv[i])
-		else:
-			files.append(sys.argv[i])	
+  return new_args
+          
+def main(sys_argv: list):
+  args = []
+  opts = []
 
-	check_against_blacklist(files)
+  # separate options from args
+  for i in range(1, len(sys_argv)):
+    if '-' == sys_argv[i][0]:
+      opts.append(sys_argv[i])
+    else:
+      args.append(sys_argv[i])
 
-	if len(files) == 0:
-		quit()	
+  new_args = check_against_blacklist(args)
+  # in case all args are blacklisted,
+  # just exit. (rm prints an error when
+  # given no arguments and that's pretty
+  # redundant after rm-blacklist has
+  # printed its own)
+  if len(new_args) == 0:
+    sys.exit()
 
-	cmd = "rm"
-	for flag in flags: 
-		cmd = cmd + " " + flag 
+  com = "rm"
+  for opt in opts:
+    com = com + " " + opt
 
-	for file in files:
-		cmd = cmd + " " + file
+  for arg in new_args:
+    com = com + " " + arg
 
-	os.system(cmd)
+  os.system(com)
 
-main()
+main(sys.argv)
