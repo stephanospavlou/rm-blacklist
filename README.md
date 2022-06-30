@@ -36,8 +36,8 @@ use the file's absolute path. Lines starting with ``#``
 will be ignored.
 
 ### Using ``blacklist.py``
-The script ``blacklist.py`` automate the process and 
-will make your life easier (especially when blaclisting
+The script ``blacklist.py`` automates the process and 
+tries to make your life easier (especially when blacklisting
 all of the files in a directory recursively). If you followed 
 the aliasing instructions above, running
 the following command will blacklist the passed files:
