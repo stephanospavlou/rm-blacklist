@@ -1,5 +1,5 @@
 # rm-blacklist
-Python wrapper for the Unix (at the least the GNU)
+Python wrapper for the Unix (*at the least the GNU*)
 ``rm`` command which checks every argument
 to the command against a user maintained blacklist.
 
@@ -54,8 +54,8 @@ attempting to blacklist a file that is literally named ``-r``,
 you can do so by just not passing it as the first argument.
 
 ## Usage
-**rm-blacklist** allows you to continue removing files as
-before, most likely without you realizing it's there most
+**rm-blacklist** allows you to go on removing files as
+before, probably without you even realizing it's there most
 of the time. If you attempt however to remove a file you have
 blacklisted, you will receive the following message:
 
