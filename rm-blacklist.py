@@ -1,58 +1,29 @@
-#!/usr/bin/env python3
-import os, sys
+#!/usr/bin/env python
+import os
+import sys
 
-blacklist = ".blklst"
+blacklistPath = '.blklst' # SET ME!
 
-def check_against_blacklist(args: list) -> list:
-  with open(blacklist, "r") as file:
-    lines = file.readlines()
-
-  new_args = args
-
-  for line in lines:
-    line = line.strip()
-
-    if line == "" or line[0] == '#':
-      continue
+for arg in sys.argv[1:]:
+    if argv[0] == '-':
+        options.append(arg)
     else:
-      for arg in args:
-        if os.path.abspath(arg) == line:
-          print("Cannot rm " + arg + ": file is blacklisted")
-          # there is an inefficiency here:
-          # we continue to check args that
-          # we have already determined are
-          # blacklisted.
-          new_args.remove(arg)
+        filesToldToDelete.append(arg)
 
-  return new_args
-          
-def main(sys_argv: list):
-  args = []
-  opts = []
+filesSafeToDelete = filesToldToDelete
+with open(blacklistPath, 'r') as blacklist:
+    for line in blacklist.readlines():
+        if line == '' or line[0] == '#':
+            continue
+        else:
+            for file in filesToldToDelete:
+                if os.abspath(file) == line:
+                    print('Cannot rm ' + file + ': file or directory is'
+                        + ' blacklisted')
+                    filesSafeToDelete.remove(file)
 
-  # separate options from args
-  for i in range(1, len(sys_argv)):
-    if '-' == sys_argv[i][0]:
-      opts.append(sys_argv[i])
-    else:
-      args.append(sys_argv[i])
-
-  new_args = check_against_blacklist(args)
-  # in case all args are blacklisted,
-  # just exit. (rm prints an error when
-  # given no arguments and that's pretty
-  # redundant after rm-blacklist has
-  # printed its own)
-  if len(new_args) == 0:
+if len(filesSafeToDelete) == 0:
     sys.exit()
 
-  com = "rm"
-  for opt in opts:
-    com = com + " " + opt
-
-  for arg in new_args:
-    com = com + " " + arg
-
-  os.system(com)
-
-main(sys.argv)
+safeRm = 'rm ' + ' '.join(options) + ' '.join(filesSafeToDelete)
+os.system(safeRm)

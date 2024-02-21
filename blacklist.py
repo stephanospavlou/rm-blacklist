@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-import os, sys
+import os
+import sys
 
-blacklistPath = ".blklst" # SET ME!
+blacklistPath = '.blklst' # SET ME!
 
 usage = '''Usage: blacklist [options] <file | directory> <file | directory> ...
 Options:
@@ -19,9 +20,9 @@ else:
     recursiveMode = False
     filesToBlacklist = sys.argv[1:]
 
-with open(blacklistPath, "a") as blacklist:
+with open(blacklistPath, 'a') as blacklist:
     for file in filesToBlacklist:
-        blacklist.write("\n" + os.path.abspath(file))
+        blacklist.write('\n' + os.path.abspath(file))
         if recursiveMode == True:
             for dirPath, dirNames, fileNames in os.walk(file, followlinks=True):
                 for dirName in dirNames:

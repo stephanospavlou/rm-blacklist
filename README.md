@@ -29,25 +29,26 @@ The helper script ``blacklist.py`` can be used to add files (or directories) to
 the blacklist. Using it looks like this:
 
 ```
-blacklist [-r] <file1> <file2> ...
+blacklist [-r] <file | directory> <file2 | directory> ...
 ```
 
-The option ``-r`` is optional: If used, it will blacklist the directory passed
-as well as all files (and directories) contained within it recursively.
+The flag ``-r`` is optional: If used, it will blacklist the directory passed
+as well as all files (and directories) contained within it recursively. This
+flag is only recognized if it is used as the first argument to the script.
 
-Note that blacklisting a directory without using the ``-r`` switch prevents 
+Note that blacklisting a directory without using the ``-r`` flag prevents 
 deletion of the directory by ``rm`` **but not its contents**. That is:
 
 ```
-$ blacklist blacklisted_dir
-$ rm -rf blacklisted_dir
-$ Cannot rm blacklisted_dir: file is blacklisted.
+$ blacklist dir
+$ rm -rf dir
+$ Cannot rm dir: file is blacklisted.
 ```
 ``rm-blacklist`` catches blacklisted directory.
 
 ```
-$ blacklist blacklisted_dir
-$ rm -rf blacklisted_dir/*
+$ blacklist dir
+$ rm -rf dir/*
 $ 
 ```
 ``rm-blacklist`` does not prevent the deletion of the contents of
