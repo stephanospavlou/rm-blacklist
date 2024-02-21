@@ -15,17 +15,17 @@ for arg in sys.argv[1:]:
 filesSafeToDelete = filesToldToDelete
 with open(blacklistPath, 'r') as blacklist:
     for line in blacklist.readlines():
-        if line == '' or lstrip(line)[0] == '#':
+        if line == '' or line[0] == '#':
             continue
         else:
             for file in filesToldToDelete:
                 fileAbsPath = os.path.abspath(file)
                 if fileAbsPath in line:
                     if os.path.isdir(fileAbsPath):
-                        print('Cannot rm directory ' + file + ' because either'
-                            + ' it or its contents are blacklisted')
+                        print('rm-blacklist: either' + file + ' or its contents'
+                            + ' are blacklisted')
                     else:
-                        print('Cannot rm ' + file + ': file is blacklisted')
+                        print('rm-blacklist: ' + file + ' is blacklisted')
 
 
 if len(filesSafeToDelete) == 0:
