@@ -1,38 +1,32 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import os, sys
 
-blacklist = ".blklst"
+blacklistPath = ".blklst" # SET ME!
 
-def add_to_blacklist(args: list):
-  with open(blacklist, "a") as file:
-    for arg in args:
-      file.write("\n" + arg)	
+usage = '''Usage: blacklist [options] <file | directory> <file | directory> ...
+Options:
+\t-h, --help\tdisplay this help and exit
+\t-r        \tblacklist directory/directories recursively'''
 
-def main(sys_argv: list):
-  if len(sys_argv) <= 1:
+if len(sys.argv) == 1 or sys.argv[1] == '-h' or sys.argv[1] == '--help':
+    print(usage)
     sys.exit()
 
-  args = []
- 
-  if sys_argv[1] == "-r":
-    recursive_mode = True
-    start = 2
-  else:
-    recursive_mode = False
-    start = 1
+if sys.argv[1] == '-r':
+    recursiveMode = True
+    filesToBlacklist = sys.argv[2:]
+else:
+    recursiveMode = False
+    filesToBlacklist = sys.argv[1:]
 
-  for i in range(start, len(sys_argv)):
-    args.append(os.path.abspath(sys_argv[i]))
-    if recursive_mode == True:
-      # recursively add all files
-      # and directories to args
-      for dirpath, dirnames, filenames in os.walk(sys_argv[i], followlinks=True):
-        for d in dirnames:
-          args.append(os.path.abspath(os.path.join(dirpath, d)))
-
-        for f in filenames:
-          args.append(os.path.abspath(os.path.join(dirpath, f)))
-
-  add_to_blacklist(args)
-
-main(sys.argv)
+with open(blacklistPath, "a") as blacklist:
+    for file in filesToBlacklist:
+        blacklist.write("\n" + os.path.abspath(file))
+        if recursiveMode == True:
+            for dirPath, dirNames, fileNames in os.walk(file, followlinks=True):
+                for dirName in dirNames:
+                    blacklist.write("\n" +
+                        os.path.abspath(os.path.join(dirPath, dirName)))
+                for fileName in fileNames:
+                    blacklist.write("\n" +
+                        os.path.abspath(os.path.join(dirPath, fileName)))
