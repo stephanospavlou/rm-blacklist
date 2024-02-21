@@ -54,6 +54,9 @@ $
 ``rm-blacklist`` does not prevent the deletion of the contents of
 ``blacklisted_dir``.
 
+``blacklist.py`` does not check whether or not a file (or directory) has already
+been blacklisted before adding it to the blacklist.
+
 ### Manually
 Alternatively, files can be manually blacklisted. This can be done by placing
 the absolute path of each file you wish to blacklist on a separate line in

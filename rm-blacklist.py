@@ -4,8 +4,10 @@ import sys
 
 blacklistPath = '.blklst' # SET ME!
 
+options = []
+filesToldToDelete = []
 for arg in sys.argv[1:]:
-    if argv[0] == '-':
+    if arg[0] == '-':
         options.append(arg)
     else:
         filesToldToDelete.append(arg)
@@ -13,17 +15,21 @@ for arg in sys.argv[1:]:
 filesSafeToDelete = filesToldToDelete
 with open(blacklistPath, 'r') as blacklist:
     for line in blacklist.readlines():
-        if line == '' or line[0] == '#':
+        if line == '' or lstrip(line)[0] == '#':
             continue
         else:
             for file in filesToldToDelete:
-                if os.abspath(file) == line:
-                    print('Cannot rm ' + file + ': file or directory is'
-                        + ' blacklisted')
-                    filesSafeToDelete.remove(file)
+                fileAbsPath = os.path.abspath(file)
+                if fileAbsPath in line:
+                    if os.path.isdir(fileAbsPath):
+                        print('Cannot rm directory ' + file + ' because either'
+                            + ' it or its contents are blacklisted')
+                    else:
+                        print('Cannot rm ' + file + ': file is blacklisted')
+
 
 if len(filesSafeToDelete) == 0:
     sys.exit()
 
-safeRm = 'rm ' + ' '.join(options) + ' '.join(filesSafeToDelete)
+safeRm = 'rm ' + ' '.join(options) + ' ' + ' '.join(filesSafeToDelete)
 os.system(safeRm)
