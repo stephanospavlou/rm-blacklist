@@ -42,7 +42,7 @@ deletion of the directory by ``rm`` **but not its contents**. That is:
 ```
 $ blacklist dir
 $ rm -rf dir
-$ Cannot rm dir: file is blacklisted.
+$ rm-blacklist: either dir or its contents are blacklisted
 ```
 ``rm-blacklist`` catches blacklisted directory.
 
